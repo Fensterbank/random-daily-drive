@@ -1,6 +1,12 @@
 {
   "name": "randomized-daily-drive",
-  "version": "0.1.0",
+  "description": "A playlist generator for spotify based on your favorite songs and recommendations.",
+  "author": "Frédéric Bolvin <fred@f-bit.software> (https://bol.vin)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Fensterbank/random-daily-drive.git"
+  },
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -8,8 +14,18 @@
     "start": "next start"
   },
   "dependencies": {
+    "@material-ui/core": "^4.9.11",
+    "lodash": "^4.17.15",
     "next": "9.3.5",
+    "node-fetch": "^2.6.0",
+    "query-string": "^6.12.1",
     "react": "16.13.1",
-    "react-dom": "16.13.1"
+    "react-dom": "16.13.1",
+    "uuid": "^7.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^13.13.2",
+    "@types/react": "^16.9.34",
+    "typescript": "^3.8.3"
   }
 }
