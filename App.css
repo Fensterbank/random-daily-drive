@@ -19,6 +19,27 @@ body {
   flex-flow: column;
 }
 
+.design {
+  position: fixed;
+  top: 0;
+  left: 0;
+  overflow: visible;
+  height: 100%;
+  width: 100%;
+  background-repeat: no-repeat;
+  background-size: contain;
+  z-index: -1;
+}
+
+#left-image {
+  background-image: url('/img/left.png');
+}
+
+#right-image {
+  background-image: url('/img/right.png');
+  background-position: right;
+}
+
 main {
   flex-grow: 1;
   padding: 2em 0;
@@ -29,8 +50,12 @@ main {
 main > .MuiContainer-root {
   display: flex;
   flex-flow: column;
-  align-items: center;
   flex-grow: 1;
+}
+
+main > .MuiContainer-root > h1 {
+  margin-bottom: 2em;
+  font-weight: bold;
 }
 
 sub {
@@ -42,14 +67,46 @@ footer {
   justify-content: space-between;
   align-items: center;
   padding: 0.5em;
-  background-color: #1e1e1e;
-  border-top: 1px solid #000;
+  background-color: #1db954;
+  border-top: 1px solid #4d4d4d;
 }
 
-main .MuiButtonBase-root {
+footer a {
+  font-weight: bold;
+}
+
+#submit {
   margin: 3em 0 1em 0;
 }
 
-i {
+b {
   color: #1DB954;
+}
+
+ol {
+  list-style: none;
+  counter-reset: li;
+  margin-bottom: 3em;
+}
+
+li {
+  color: #666;
+}
+
+li::before {
+  content: counter(li) ".";
+  counter-increment: li;
+  color: #1DB954;
+  display: inline-block;
+  width: 1.5em;
+  margin-left: -1em;
+  font-weight: bold;
+}
+
+img.theme-image {
+  max-width: 100%;
+}
+
+img.small {
+  max-height: 12em;
 }

@@ -26,7 +26,7 @@ const Generator: FC<GeneratorProps> = ({ blocks, blockSize, name, withPodcasts }
   }
 
   return (<div className="generator">
-    <Button disabled={progress === PROGRESS.creating} color="primary" variant="contained" type="button" onClick={onGenerateClick}>
+    <Button id="submit" disabled={progress === PROGRESS.creating} color="primary" variant="contained" type="button" onClick={onGenerateClick}>
       {(progress === PROGRESS.finished) ? 'Regenerate Playlist' : 'Generate Playlist'}
     </Button>
     {progress === PROGRESS.finished && <Typography variant="body2">Playlist has been generated.<br />You can find it in your Spotify.</Typography>}

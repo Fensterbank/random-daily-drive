@@ -15,7 +15,6 @@ export default class MyDocument extends Document {
             rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
           />
-          <title>Random Daily Drive - Spotify® Playlist Generator</title>
           <meta name="description" content="A playlist generator for spotify based on your favorite songs and recommendations." />
           <meta name="author" content="f-bit software - Fr&#233;d&#233;ric Bolvin" />
           <meta name="keywords" content="spotify, playlist, generator" />
