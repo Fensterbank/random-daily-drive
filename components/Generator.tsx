@@ -13,14 +13,15 @@ interface GeneratorProps {
   blocks: number,
   blockSize: number;
   name: string;
+  withPodcasts: boolean;
 }
 
-const Generator: FC<GeneratorProps> = ({ blocks, blockSize, name }) => {
+const Generator: FC<GeneratorProps> = ({ blocks, blockSize, name, withPodcasts }) => {
   const [progress, setProgress] = useState(PROGRESS.unset);
 
   const onGenerateClick = async () => {
     setProgress(PROGRESS.creating);
-    await generateDailyDrive(name, blocks, blockSize);
+    await generateDailyDrive(name, blocks, blockSize, withPodcasts);
     setProgress(PROGRESS.finished);
   }
 

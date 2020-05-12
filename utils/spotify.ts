@@ -1,4 +1,4 @@
-import { find, flattenDeep, shuffle } from 'lodash';
+import { find, flattenDeep, shuffle, filter, startsWith } from 'lodash';
 
 import fetch from 'node-fetch';
 import { serialAsyncForEach } from '.';
@@ -53,10 +53,10 @@ const fetchPlaylistItemURLs = async (playlistId: string, items: any[] = [], url:
 }
 
 const fetchUserInfo = () =>
-performRequest(`https://api.spotify.com/v1/me`);
+  performRequest(`https://api.spotify.com/v1/me`);
 
 const getRecommendations = (seedTrack: string, limit: number) =>
-performRequest(`https://api.spotify.com/v1/recommendations?seed_tracks=${seedTrack}&limit=${limit}`);
+  performRequest(`https://api.spotify.com/v1/recommendations?seed_tracks=${seedTrack}&limit=${limit}`);
 
 const fetchAllSavedTracks = () => fetchSavedTracks();
 const fetchAllSavedPlaylists = () => fetchSavedPlaylists();
@@ -89,7 +89,26 @@ const addTracks = (playlistId: string, uris: string[]) =>
     uris: uris
   });
 
-export const generateDailyDrive = async (name: string, blocks: number, blockSize: number) => {
+/**
+ * Fetches the podcast episodes from the original Daily Drive playlist
+ * Unfortunateley there is no better way to search the list than do it like this, it's not guaranteed we find it.
+ */
+const fetchDailyDrivePodcasts = async () => {
+  const searchResult = await performRequest(`https://api.spotify.com/v1/search/?type=playlist&q="Your Daily Drive"&limit=50`);
+  // FIXME: what are the names of the Daily Drive playlist in other languages? Is there any way to universally identifiy that playlist?
+  const dailyDrive = find(searchResult.playlists.items, (item) => (item.owner.id === 'spotify' && (item.name === 'Your Daily Drive' || item.name === 'Daily Drive' )) );
+
+  if (!dailyDrive) {
+    console.warn('Your Daily Drive could not be found. Skipping including podcasts.')
+    return null;
+  }
+
+  const allTracks = await fetchAllPlaylistTrackUris(dailyDrive.id);
+  const episodes = filter(allTracks, (uri) => startsWith(uri, 'spotify:episode:'));
+  return episodes;
+}
+
+export const generateDailyDrive = async (name: string, blocks: number, blockSize: number, withPodcasts: boolean) => {
   const user = await fetchUserInfo();
 
   let playlist = await getExistingPlaylist(user.id, name);
@@ -104,12 +123,27 @@ export const generateDailyDrive = async (name: string, blocks: number, blockSize
 
   const recommendedBlocks = [];
 
+  let episodeUris = null;
+  if (withPodcasts)
+    episodeUris = await fetchDailyDrivePodcasts();
+
   await serialAsyncForEach(seedTracks, async (track) => {
     const recommendations = await getRecommendations(track.id, blockSize - 1)
+    if (episodeUris) {
+      const episodeUri = episodeUris.shift();
+      if (episodeUri)
+        recommendedBlocks.push(episodeUri);
+    }
     recommendedBlocks.push(track.uri);
     recommendedBlocks.push(recommendations.tracks.map(i => i.uri));
     return;
   });
+
+  // finally if we have more podcasts left than blocks, we'll add them all in the last block
+  if (episodeUris && episodeUris.length > 0) {
+    recommendedBlocks.push(...episodeUris);
+  }
+
   await addTracks(playlist.id, flattenDeep(recommendedBlocks));
   return playlist;
 }
