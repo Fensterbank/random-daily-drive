@@ -1,4 +1,4 @@
-import { find, flattenDeep, shuffle, filter, startsWith } from 'lodash';
+import { filter, find, flattenDeep, shuffle, startsWith } from 'lodash';
 
 import fetch from 'node-fetch';
 import { serialAsyncForEach } from '.';
@@ -44,7 +44,7 @@ const fetchSavedPlaylists = async (items: any[] = [], url: string = null) => {
 
 const fetchPlaylistItemURLs = async (playlistId: string, items: any[] = [], url: string = null) => {
   const response = await performRequest(url || `https://api.spotify.com/v1/playlists/${playlistId}/tracks?fields=limit,next,items(track(uri))&limit=100`);
-  const cItems = [...items, ...response.items.map(i => i.track.uri)];
+  const cItems = [...items, ...response.items.map(i => i.track ? i.track.uri : null).filter(i => i)];
 
   if (response.next)
     return fetchPlaylistItemURLs(playlistId, cItems, response.next);
