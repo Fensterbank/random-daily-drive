@@ -34,7 +34,7 @@ export default function Home() {
 
   if (hash == null && typeof window !== 'undefined') {
     const hash = queryString.parse(window.location.hash);
-    window.location.hash = '';
+    window.history.pushState(null, '', window.location.href.split('#')[0]);
     const state = window.localStorage.getItem('state');
 
     if (hash.state === state) {
