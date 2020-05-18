@@ -6,16 +6,13 @@ import Generator from '../components/Generator';
 import { clamp } from 'lodash';
 import clsx from 'clsx';
 import { setAccessToken } from '../utils/spotify';
+import useGeneratorSettings from '../hooks/useGeneratorSettings';
 import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 export default function Home() {
-
   const [hash, setHash] = useState<any>(null);
-  const [blocks, setBlocks] = useState(6);
-  const [blockSize, setBlockSize] = useState(4);
-  const [name, setName] = useState('Random Daily Drive');
-  const [withPodcasts, setWithPodcasts] = useState(true);
+  const { blocks, setBlocks, blockSize, setBlockSize, name, setName, withPodcasts, setWithPodcasts } = useGeneratorSettings();
 
   const isXS = useMediaQuery((theme: any) => theme.breakpoints.down('xs'));
   const hideImage = useMediaQuery('(max-width:800px)') && !isXS;

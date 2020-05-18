@@ -1,6 +1,7 @@
 import { Button, Typography } from '@material-ui/core';
 import { FC, useState } from 'react';
 
+import { GeneratorProps } from '../types';
 import { generateDailyDrive } from '../utils/spotify';
 
 enum PROGRESS {
@@ -8,13 +9,6 @@ enum PROGRESS {
   creating = 'creating',
   finished = 'finished',
 };
-
-interface GeneratorProps {
-  blocks: number,
-  blockSize: number;
-  name: string;
-  withPodcasts: boolean;
-}
 
 const Generator: FC<GeneratorProps> = ({ blocks, blockSize, name, withPodcasts }) => {
   const [progress, setProgress] = useState(PROGRESS.unset);
