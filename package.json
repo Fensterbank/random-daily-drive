@@ -16,7 +16,7 @@
   "dependencies": {
     "@material-ui/core": "^4.9.11",
     "clsx": "^1.1.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "next": "9.3.5",
     "node-fetch": "^2.6.0",
     "query-string": "^6.12.1",
