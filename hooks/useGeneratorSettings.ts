@@ -1,51 +1,52 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
-import { GeneratorProps } from '../types';
-import useDebounce from './useDebounce';
+import { GeneratorProps } from "../types";
+import useDebounce from "./useDebounce";
 
 export default () => {
-  const [blocks, setBlocks] = useState(6);
-  const [blockSize, setBlockSize] = useState(4);
-  const [name, setName] = useState('Random Daily Drive');
-  const [withPodcasts, setWithPodcasts] = useState(true);
+  const [name, setName] = useState(new Date().toISOString().split("T")[0]);
+  const [blockSize, setBlockSize] = useState(3);
+  const [maximumDuration, setMaximumDuration] = useState(30);
 
   const [settingsString, setSettingsString] = useState(null);
   const debouncedSettings = useDebounce(settingsString, 500);
 
   // load the settings from local storage after mount
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const settings: GeneratorProps | null = JSON.parse(window.localStorage.getItem('settings'));
+    if (typeof window !== "undefined") {
+      const settings: GeneratorProps | null = JSON.parse(
+        window.localStorage.getItem("settings")
+      );
       if (settings) {
-        setBlocks(settings.blocks);
         setBlockSize(settings.blockSize);
-        setName(settings.name);
-        setWithPodcasts(settings.withPodcasts);
+        setMaximumDuration(settings.maximumDuration);
       }
     }
   }, []);
 
   // on any change update the settings json strings for debouncing
   useEffect(() => {
-    setSettingsString(JSON.stringify({
-      blocks,
-      blockSize,
-      name,
-      withPodcasts
-    }));
-  }, [blocks, blockSize, name, withPodcasts]);
+    setSettingsString(
+      JSON.stringify({
+        name,
+        blockSize,
+        maximumDuration,
+      })
+    );
+  }, [name, blockSize, maximumDuration]);
 
   // save settings to local storage after debounce timeout
-  useEffect(() => window.localStorage.setItem('settings', debouncedSettings), [debouncedSettings]);
+  useEffect(
+    () => window.localStorage.setItem("settings", debouncedSettings),
+    [debouncedSettings]
+  );
 
   return {
-    blocks,
-    blockSize,
     name,
-    withPodcasts,
-    setBlocks,
-    setBlockSize,
     setName,
-    setWithPodcasts
-  }
-}
+    blockSize,
+    setBlockSize,
+    maximumDuration,
+    setMaximumDuration,
+  };
+};

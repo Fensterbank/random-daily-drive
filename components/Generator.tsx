@@ -1,30 +1,72 @@
-import { Button, Typography } from '@material-ui/core';
-import { FC, useState } from 'react';
+import { Button, Typography, Grid } from "@material-ui/core";
+import { FC, useState } from "react";
 
-import { GeneratorProps } from '../types';
-import { generateDailyDrive } from '../utils/spotify';
+import { GeneratorProps } from "../types";
+import { generateDailyDrive } from "../process/spotify";
 
 enum PROGRESS {
-  unset = 'unset',
-  creating = 'creating',
-  finished = 'finished',
-};
+  unset = "unset",
+  started = "started",
+  finished = "finished",
+}
 
-const Generator: FC<GeneratorProps> = ({ blocks, blockSize, name, withPodcasts }) => {
-  const [progress, setProgress] = useState(PROGRESS.unset);
+const Generator: FC<GeneratorProps> = ({
+  name,
+  blockSize,
+  maximumDuration,
+}) => {
+  const [started, setStarted] = useState(PROGRESS.unset);
+  const [logs, setLogs] = useState([]);
+
+  const appendMessage = (message: string | null) => {
+    if (!message) {
+      setLogs([]);
+    } else {
+      setLogs((prevLogs) => [message, ...prevLogs]);
+    }
+  };
 
   const onGenerateClick = async () => {
-    setProgress(PROGRESS.creating);
-    await generateDailyDrive(name, blocks, blockSize, withPodcasts);
-    setProgress(PROGRESS.finished);
-  }
+    setStarted(PROGRESS.started);
+    await generateDailyDrive(name, blockSize, maximumDuration, appendMessage);
+    setStarted(PROGRESS.finished);
+  };
 
-  return (<div className="generator">
-    <Button id="submit" disabled={progress === PROGRESS.creating} color="primary" variant="contained" type="button" onClick={onGenerateClick}>
-      {(progress === PROGRESS.finished) ? 'Regenerate Playlist' : 'Generate Playlist'}
-    </Button>
-    {progress === PROGRESS.finished && <Typography variant="body2">Playlist has been generated.<br />You can find it in your Spotify.</Typography>}
-  </div>)
-}
+  return (
+    <div className="generator">
+      <Button
+        id="submit"
+        disabled={started === PROGRESS.started}
+        color="primary"
+        variant="contained"
+        type="button"
+        onClick={onGenerateClick}
+      >
+        {started === PROGRESS.finished
+          ? "Regenerate Playlist"
+          : "Generate Playlist"}
+      </Button>
+      {}
+      {started === PROGRESS.started && (
+        <Typography variant="body2">
+          Hang tight, the playlist is being created...
+        </Typography>
+      )}
+      {started === PROGRESS.finished && (
+        <Typography variant="body2">Done!</Typography>
+      )}
+      {logs.length > 0 && (
+        <Grid>
+          --
+          {logs.map((message, index) => (
+            <Typography key={index} variant="body2">
+              {message}
+            </Typography>
+          ))}
+        </Grid>
+      )}
+    </div>
+  );
+};
 
 export default Generator;

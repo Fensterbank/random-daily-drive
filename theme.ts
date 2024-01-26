@@ -1,12 +1,12 @@
-import { createMuiTheme } from '@material-ui/core/styles';
+import { createTheme } from "@material-ui/core/styles";
 
-export const theme = createMuiTheme({
+export const theme = createTheme({
   palette: {
     primary: {
-      main: '#1DB954',
+      main: "#1DB954",
     },
     secondary: {
-      main: '#2f2e41',
+      main: "#2f2e41",
     },
   },
 });

@@ -1,6 +1,5 @@
 export interface GeneratorProps {
-  blocks: number,
-  blockSize: number;
   name: string;
-  withPodcasts: boolean;
-};
+  blockSize: number;
+  maximumDuration: number;
+}
