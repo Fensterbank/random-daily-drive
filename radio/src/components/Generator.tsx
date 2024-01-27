@@ -1,7 +1,6 @@
+import { useState } from "react";
 import { Button, Typography, Grid } from "@material-ui/core";
-import { FC, useState } from "react";
 
-import { GeneratorProps } from "../types";
 import { generateDailyDrive } from "../process/spotify";
 
 enum PROGRESS {
@@ -10,13 +9,21 @@ enum PROGRESS {
   finished = "finished",
 }
 
-const Generator: FC<GeneratorProps> = ({
+type GeneratorProps = {
+  name: string;
+  blockSize: number;
+  maximumDuration: number;
+  accessToken: string | null;
+};
+
+const Generator = ({
   name,
   blockSize,
   maximumDuration,
-}) => {
+  accessToken,
+}: GeneratorProps) => {
   const [started, setStarted] = useState(PROGRESS.unset);
-  const [logs, setLogs] = useState([]);
+  const [logs, setLogs] = useState<string[]>([]);
 
   const appendMessage = (message: string | null) => {
     if (!message) {
@@ -28,7 +35,13 @@ const Generator: FC<GeneratorProps> = ({
 
   const onGenerateClick = async () => {
     setStarted(PROGRESS.started);
-    await generateDailyDrive(name, blockSize, maximumDuration, appendMessage);
+    await generateDailyDrive(
+      name,
+      blockSize,
+      maximumDuration,
+      accessToken,
+      appendMessage
+    );
     setStarted(PROGRESS.finished);
   };
 

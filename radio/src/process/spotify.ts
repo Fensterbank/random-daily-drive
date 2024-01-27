@@ -1,20 +1,21 @@
-import fetch from "node-fetch";
 import { filter, find, startsWith, shuffle, concat, uniqBy } from "lodash";
 
-let accessToken: string | null = null;
+let _accessToken: string | null = null;
 
-export const setAccessToken = (token: string) => (accessToken = token);
+export const setAccessToken = (token: string) => (_accessToken = token);
 
-const performRequest = (url, method: string = "GET", body?: any) =>
+const performRequest = (url: string, method: string = "GET", body?: any) =>
   fetch(url, {
     method,
     body: body ? JSON.stringify(body) : undefined,
     headers: {
-      Authorization: `Bearer ${accessToken}`,
+      Authorization: `Bearer ${_accessToken}`,
     },
   }).then((response) => {
     if (response.status === 429) {
-      return { status: 429 };
+      console.log({ response });
+      console.log(response.json());
+      return { status: 429, headers: response.headers.entries() };
     }
 
     if (response.ok) {
@@ -27,7 +28,7 @@ const performRequest = (url, method: string = "GET", body?: any) =>
     return { error: true };
   });
 
-const sleep = (seconds) => {
+const sleep = (seconds: number) => {
   return new Promise((resolve) => setTimeout(resolve, seconds * 1000));
 };
 
@@ -154,7 +155,7 @@ const fetchDailyDriveMusic = async (
 /* Tracks **/
 
 const fetchUserTopTracks = async (
-  blockSize,
+  blockSize: number,
   appendMessage: (message: string) => void
 ) => {
   const topSongsPerBlock = Math.ceil(blockSize / 2);
@@ -229,11 +230,28 @@ const fetchUserTopTracks = async (
     );
 
     if (trackRecommendations.status === 429) {
-      console.log("oops!");
       appendMessage(
-        `Rate limit reached. Can't hit the recommendation API. Switching to using music from the Daily Drive playlist...`
+        `Rate limit reached. Can't hit the recommendation API. Switching to using the user's random top tracks...`
       );
-      return fetchDailyDriveMusic(appendMessage);
+
+      const shuffledTopTrackWithoutRecommendations = shuffle(topTracks).slice(
+        0,
+        10 * blockSize
+      );
+
+      let shuffledTopTracksUris = [];
+      for (let p = 0; p < shuffledTopTrackWithoutRecommendations.length; p++) {
+        shuffledTopTracksUris.push(
+          shuffledTopTrackWithoutRecommendations[p].uri
+        );
+        console.log(shuffledTopTrackWithoutRecommendations[p]);
+        appendMessage(
+          `Selected: ${shuffledTopTrackWithoutRecommendations[p].artists[0].name} - ${shuffledTopTrackWithoutRecommendations[p].name} [top track]`
+        );
+      }
+
+      return shuffledTopTracksUris;
+      // return fetchDailyDriveMusic(appendMessage);
     }
 
     await sleep(1);
@@ -373,8 +391,6 @@ const fetchEpisodesToInsert = async (
       selectedPodcast = unusedPodcasts[j].show;
       appendMessage(`Digging in more podcasts: ${selectedPodcast.name}...`);
 
-      console.log({ i, j }, selectedPodcast.name, unusedPodcasts.length);
-
       episode = await fetchEpisodesOfPodcast(
         unusedPodcasts[j],
         maximumDuration
@@ -394,10 +410,6 @@ const fetchEpisodesToInsert = async (
           episode.duration_ms / 1000 / 60
         )} minutes)`
       );
-      console.log({
-        podcast: selectedPodcast,
-        episode,
-      });
 
       episodeUris.push(episode.uri);
     }
@@ -427,9 +439,17 @@ export const generateDailyDrive = async (
   name: string,
   blockSize: number,
   maximumDuration: number,
+  accessToken: string | null,
   appendMessage: (message: string) => void
 ) => {
+  setAccessToken(accessToken);
   appendMessage(null);
+
+  if (!accessToken) {
+    appendMessage("Access token missing. Please log in again.");
+    return;
+  }
+
   appendMessage("Fetching user info...");
   const user = await fetchUserInfo();
 

@@ -1,4 +1,3 @@
-import fetch from "node-fetch";
 import { filter, find, flattenDeep, shuffle, startsWith } from "lodash";
 
 let accessToken: string | null = null;

@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 
-import { GeneratorProps } from "../types";
 import useDebounce from "./useDebounce";
 
 export default () => {
   const [name, setName] = useState(new Date().toISOString().split("T")[0]);
   const [blockSize, setBlockSize] = useState(3);
   const [maximumDuration, setMaximumDuration] = useState(30);
+  const [accessToken, setAccessToken] = useState(null);
+  const [stop, setStop] = useState(false);
 
   const [settingsString, setSettingsString] = useState(null);
   const debouncedSettings = useDebounce(settingsString, 500);
@@ -14,7 +15,7 @@ export default () => {
   // load the settings from local storage after mount
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const settings: GeneratorProps | null = JSON.parse(
+      const settings: null = JSON.parse(
         window.localStorage.getItem("settings")
       );
       if (settings) {
@@ -48,5 +49,7 @@ export default () => {
     setBlockSize,
     maximumDuration,
     setMaximumDuration,
+    accessToken,
+    setAccessToken,
   };
 };
