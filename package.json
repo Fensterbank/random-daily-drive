@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@carbon/icons-react": "^11.45.0",
     "@material-ui/core": "^4.12.4",
     "ahooks": "^3.8.0",
     "classnames": "^2.5.1",
@@ -17,7 +18,9 @@
     "query-string": "^9.0.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "uuid": "^10.0.0"
+    "react-spinners": "^0.14.1",
+    "uuid": "^10.0.0",
+    "zustand": "^4.5.4"
   },
   "devDependencies": {
     "@types/lodash": "^4.17.6",

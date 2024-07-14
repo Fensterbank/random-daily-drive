@@ -224,6 +224,22 @@
     "@babel/helper-validator-identifier" "^7.24.7"
     to-fast-properties "^2.0.0"
 
+"@carbon/icon-helpers@^10.49.0":
+  version "10.49.0"
+  resolved "https://registry.yarnpkg.com/@carbon/icon-helpers/-/icon-helpers-10.49.0.tgz#94a8e6fcef773e632ce90697ca6ddebf7fa79192"
+  integrity sha512-GSx22ch7ahJ3u/7ZRIykeO8h/uBx3Qruybz3VYi5JBIM+smHDLldXRpJTQk65JsXuSiPWWGepIb1FlhV99fgtw==
+  dependencies:
+    "@ibm/telemetry-js" "^1.5.0"
+
+"@carbon/icons-react@^11.45.0":
+  version "11.45.0"
+  resolved "https://registry.yarnpkg.com/@carbon/icons-react/-/icons-react-11.45.0.tgz#93f62d09bb5599f4a2292dc324c792f5b7d1a939"
+  integrity sha512-QTf+K4BT4Vn2e9c5HDZGqTOztVOXG+4k2dAxDgAyg+18zif/kJsZKPnaFJsthxVezzELJ9cbmlXC0acbiE/zjA==
+  dependencies:
+    "@carbon/icon-helpers" "^10.49.0"
+    "@ibm/telemetry-js" "^1.5.0"
+    prop-types "^15.7.2"
+
 "@emotion/hash@^0.8.0":
   version "0.8.0"
   resolved "https://registry.yarnpkg.com/@emotion/hash/-/hash-0.8.0.tgz#bbbff68978fefdbe68ccb533bc8cbe1d1afb5413"
@@ -394,6 +410,11 @@
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-2.0.3.tgz#4a2868d75d6d6963e423bcf90b7fd1be343409d3"
   integrity sha512-93zYdMES/c1D69yZiKDBj0V24vqNzB/koF26KPaagAfd3P/4gUlh3Dys5ogAK+Exi9QyzlD8x/08Zt7wIKcDcA==
+
+"@ibm/telemetry-js@^1.5.0":
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/@ibm/telemetry-js/-/telemetry-js-1.6.0.tgz#bab4eaac0d94b9604c120a9e3062ab1b3a1a76f7"
+  integrity sha512-XXdsXhoZwKaJ1/24w/uCqx/YeDQeTu8SAl+7bHQxn62yiFUQ6/D20HhpQVdlG9/Jpv3nYJHFiDH0vGkQbXNFWg==
 
 "@isaacs/cliui@^8.0.2":
   version "8.0.2"
@@ -2053,6 +2074,11 @@ react-refresh@^0.14.2:
   resolved "https://registry.yarnpkg.com/react-refresh/-/react-refresh-0.14.2.tgz#3833da01ce32da470f1f936b9d477da5c7028bf9"
   integrity sha512-jCvmsr+1IUSMUyzOkRcvnVbX3ZYC6g9TDrDbFuFmRDq7PD4yaGbLKNQL6k2jnArV8hjYxh7hVhAZB6s9HDGpZA==
 
+react-spinners@^0.14.1:
+  version "0.14.1"
+  resolved "https://registry.yarnpkg.com/react-spinners/-/react-spinners-0.14.1.tgz#de7d7d6b3e6d4f29d9620c65495b502c7dd90812"
+  integrity sha512-2Izq+qgQ08HTofCVEdcAQCXFEYfqTDdfeDQJeo/HHQiQJD4imOicNLhkfN2eh1NYEWVOX4D9ok2lhuDB0z3Aag==
+
 react-transition-group@^4.4.0:
   version "4.4.5"
   resolved "https://registry.yarnpkg.com/react-transition-group/-/react-transition-group-4.4.5.tgz#e53d4e3f3344da8521489fbef8f2581d42becdd1"
@@ -2402,6 +2428,11 @@ uri-js@^4.2.2:
   dependencies:
     punycode "^2.1.0"
 
+use-sync-external-store@1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/use-sync-external-store/-/use-sync-external-store-1.2.0.tgz#7dbefd6ef3fe4e767a0cf5d7287aacfb5846928a"
+  integrity sha512-eEgnFxGQ1Ife9bzYs6VLi8/4X6CObHMw9Qr9tPY43iKwsPw8xE8+EFsf/2cFZ5S3esXgpWgtSCtLNS41F+sKPA==
+
 util-deprecate@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/util-deprecate/-/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf"
@@ -2472,3 +2503,10 @@ yocto-queue@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/yocto-queue/-/yocto-queue-0.1.0.tgz#0294eb3dee05028d31ee1a5fa2c556a6aaf10a1b"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
+
+zustand@^4.5.4:
+  version "4.5.4"
+  resolved "https://registry.yarnpkg.com/zustand/-/zustand-4.5.4.tgz#63abdd81edfb190bc61e0bbae045cc4d52158a05"
+  integrity sha512-/BPMyLKJPtFEvVL0E9E9BTUM63MNyhPGlvxk1XjrfWTUlV+BR8jufjsovHzrtR6YNcBEcL7cMHovL1n9xHawEg==
+  dependencies:
+    use-sync-external-store "1.2.0"
