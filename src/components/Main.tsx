@@ -1,16 +1,19 @@
-import * as queryString from 'query-string';
-
+import { FC } from "react";
+import queryString from 'query-string';
 import { Button, Container, FormControlLabel, FormGroup, FormHelperText, Grid, Switch, TextField, Typography, useMediaQuery } from '@material-ui/core';
-
-import Generator from '../components/Generator';
 import { clamp } from 'lodash';
-import clsx from 'clsx';
-import { setAccessToken } from '../utils/spotify';
-import useGeneratorSettings from '../hooks/useGeneratorSettings';
 import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import useGeneratorSettings from "../hooks/useGeneratorSettings";
+import classNames from "classnames";
+import { setAccessToken } from "../utils/spotify";
+import { useMount } from "ahooks";
+import Generator from "./Generator";
 
-export default function Home() {
+const CLIENT_ID = import.meta.env.VITE_CLIENT_ID
+const REDIRECT_URI = import.meta.env.VITE_REDIRECT_URI
+
+export const Main: FC = () => {
   const [hash, setHash] = useState<any>(null);
   const { blocks, setBlocks, blockSize, setBlockSize, name, setName, withPodcasts, setWithPodcasts } = useGeneratorSettings();
 
@@ -28,26 +31,26 @@ export default function Home() {
   const onButtonClick = () => {
     const state = uuidv4();
     window.localStorage.setItem('state', state);
-    const url = `https://accounts.spotify.com/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}&scope=playlist-read-private%20playlist-modify-private%20user-library-read&response_type=token&state=${state}`;
+    const url = `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=playlist-read-private%20playlist-modify-private%20user-library-read&response_type=token&state=${state}`;
     window.location.href = url;
   }
 
-  if (hash == null && typeof window !== 'undefined') {
-    const hash = queryString.parse(window.location.hash);
-    window.history.pushState(null, '', window.location.href.split('#')[0]);
-    const state = window.localStorage.getItem('state');
-
-    if (hash.state === state) {
-      setHash(hash);
-      setAccessToken(hash.access_token as string);
+  useMount(() => {
+    if (hash == null && typeof window !== 'undefined') {
+      const hash = queryString.parse(window.location.hash);
+      window.history.pushState(null, '', window.location.href.split('#')[0]);
+      const state = window.localStorage.getItem('state');
+  
+      if (hash.state === state) {
+        setHash(hash);
+        setAccessToken(hash.access_token as string);
+      }
     }
-  }
+  })
 
   const isAuthenticated = hash != null;
 
-  return (
-    <>
-      <main>
+  return <main>
         <Container maxWidth="lg">
           <Typography variant="h4" component="h1" color="primary" gutterBottom>
             »Random Daily Drive« playlist generator for Spotify<sub>®</sub>
@@ -55,9 +58,9 @@ export default function Home() {
 
           <Grid container spacing={5}>
             {!hideImage && <Grid item sm={4} xs={12}>
-              <img className={clsx('theme-image', {
+              <img className={classNames('theme-image', {
                 'small': isXS,
-              })} src="/img/player.png" />
+              })} src="/player.png" />
             </Grid>}
             <Grid item sm={hideImage ? 12 : 8} xs={12}>
               <Typography variant="body1" gutterBottom>
@@ -113,6 +116,4 @@ export default function Home() {
           </Grid>
         </Container>
       </main>
-    </>
-  )
 }

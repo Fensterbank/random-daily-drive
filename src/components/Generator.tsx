@@ -8,7 +8,7 @@ enum PROGRESS {
   unset = 'unset',
   creating = 'creating',
   finished = 'finished',
-};
+}
 
 const Generator: FC<GeneratorProps> = ({ blocks, blockSize, name, withPodcasts }) => {
   const [progress, setProgress] = useState(PROGRESS.unset);

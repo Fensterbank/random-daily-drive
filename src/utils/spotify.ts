@@ -1,13 +1,11 @@
 import { filter, find, flattenDeep, shuffle, startsWith } from 'lodash';
-
-import fetch from 'node-fetch';
 import { serialAsyncForEach } from '.';
 
 let accessToken: string | null = null;
 
 export const setAccessToken = (token: string) => accessToken = token;
 
-const performRequest = (url, method: string = 'GET', body?: any) =>
+const performRequest = (url: string, method: string = 'GET', body?: any) =>
   fetch(url, {
     method: method,
     body: body ? JSON.stringify(body) : undefined,
@@ -22,7 +20,7 @@ const performRequest = (url, method: string = 'GET', body?: any) =>
       throw new Error(`${response.status} ${response.statusText}`);
     })
 
-const fetchSavedTracks = async (items: any[] = [], url: string = null) => {
+const fetchSavedTracks = async (items: any[] = [], url: string|null = null): Promise<any[]> => {
   const response = await performRequest(url || `https://api.spotify.com/v1/me/tracks?offset=0&limit=50`);
   const cItems = [...items, ...response.items];
 
@@ -32,7 +30,7 @@ const fetchSavedTracks = async (items: any[] = [], url: string = null) => {
     return cItems;
 }
 
-const fetchSavedPlaylists = async (items: any[] = [], url: string = null) => {
+const fetchSavedPlaylists = async (items: any[] = [], url: string|null = null): Promise<any[]> => {
   const response = await performRequest(url || `https://api.spotify.com/v1/me/playlists?offset=0&limit=50`);
   const cItems = [...items, ...response.items];
 
@@ -42,9 +40,9 @@ const fetchSavedPlaylists = async (items: any[] = [], url: string = null) => {
     return cItems;
 }
 
-const fetchPlaylistItemURLs = async (playlistId: string, items: any[] = [], url: string = null) => {
+const fetchPlaylistItemURLs = async (playlistId: string, items: any[] = [], url: string|null = null): Promise<string[]> => {
   const response = await performRequest(url || `https://api.spotify.com/v1/playlists/${playlistId}/tracks?fields=limit,next,items(track(uri))&limit=100`);
-  const cItems = [...items, ...response.items.map(i => i.track ? i.track.uri : null).filter(i => i)];
+  const cItems = [...items, ...response.items.map((i: any) => i.track ? i.track.uri : null).filter((i: string) => i)];
 
   if (response.next)
     return fetchPlaylistItemURLs(playlistId, cItems, response.next);
@@ -60,7 +58,7 @@ const getRecommendations = (seedTrack: string, limit: number) =>
 
 const fetchAllSavedTracks = () => fetchSavedTracks();
 const fetchAllSavedPlaylists = () => fetchSavedPlaylists();
-const fetchAllPlaylistTrackUris = (playlistId: string) => fetchPlaylistItemURLs(playlistId);
+const fetchAllPlaylistTrackUris = (playlistId: string): Promise<string[]> => fetchPlaylistItemURLs(playlistId)
 
 const getExistingPlaylist = async (userId: string, name: string) => {
   const playlists = await fetchAllSavedPlaylists();
@@ -135,7 +133,7 @@ export const generateDailyDrive = async (name: string, blocks: number, blockSize
         recommendedBlocks.push(episodeUri);
     }
     recommendedBlocks.push(track.uri);
-    recommendedBlocks.push(recommendations.tracks.map(i => i.uri));
+    recommendedBlocks.push(recommendations.tracks.map((i: any) => i.uri));
     return;
   });
 

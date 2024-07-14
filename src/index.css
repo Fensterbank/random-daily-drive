@@ -1,3 +1,6 @@
+@tailwind components;
+@tailwind utilities;
+
 html,
 body {
   height: 100%;
@@ -13,7 +16,7 @@ body {
   box-sizing: border-box;
 }
 
-#__next {
+#root {
   height: 100%;
   display: flex;
   flex-flow: column;
@@ -32,11 +35,11 @@ body {
 }
 
 #left-image {
-  background-image: url('/img/left.png');
+  background-image: url('/left.png');
 }
 
 #right-image {
-  background-image: url('/img/right.png');
+  background-image: url('/right.png');
   background-position: right;
 }
 

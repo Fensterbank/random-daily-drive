@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { GeneratorProps } from '../types';
-import useDebounce from './useDebounce';
+import { useDebounce } from 'ahooks';
 
 export default () => {
   const [blocks, setBlocks] = useState(6);
@@ -9,13 +9,14 @@ export default () => {
   const [name, setName] = useState('Random Daily Drive');
   const [withPodcasts, setWithPodcasts] = useState(true);
 
-  const [settingsString, setSettingsString] = useState(null);
-  const debouncedSettings = useDebounce(settingsString, 500);
+  const [settingsString, setSettingsString] = useState<string|null>(null);
+  const debouncedSettings = useDebounce(settingsString, { wait: 500 });
 
   // load the settings from local storage after mount
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const settings: GeneratorProps | null = JSON.parse(window.localStorage.getItem('settings'));
+      const s = window.localStorage.getItem('settings')
+      const settings: GeneratorProps | null = s ? JSON.parse(s) : null
       if (settings) {
         setBlocks(settings.blocks);
         setBlockSize(settings.blockSize);
@@ -36,7 +37,7 @@ export default () => {
   }, [blocks, blockSize, name, withPodcasts]);
 
   // save settings to local storage after debounce timeout
-  useEffect(() => window.localStorage.setItem('settings', debouncedSettings), [debouncedSettings]);
+  useEffect(() => debouncedSettings ? window.localStorage.setItem('settings', debouncedSettings as string) : undefined, [debouncedSettings]);
 
   return {
     blocks,
