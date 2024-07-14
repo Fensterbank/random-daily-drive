@@ -20,7 +20,7 @@ const Generator: FC<GeneratorProps> = ({ blocks, blockSize, name, withPodcasts }
   }
 
   return (<div className="mt-4">
-    {processing !== PROGRESS.unset && <Progress />}
+    {processing !== PROGRESS.unset ? <Progress /> : <div className='mb-4' />}
     <Button id="submit" disabled={processing === PROGRESS.creating} color="primary" variant="contained" type="button" onClick={onGenerateClick}>
       {(processing === PROGRESS.finished) ? 'Regenerate Playlist' : 'Generate Playlist'}
     </Button>
