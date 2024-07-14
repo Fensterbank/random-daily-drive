@@ -3,4 +3,4 @@ export interface GeneratorProps {
   blockSize: number;
   name: string;
   withPodcasts: boolean;
-};
+}

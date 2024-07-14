@@ -1,8 +1,7 @@
-import React, { FC } from 'react';
+import { useMediaQuery } from "@material-ui/core";
+import { FC } from "react";
 
-import { useMediaQuery } from '@material-ui/core';
-
-const Design: FC = () => {
+export const Design: FC = () => {
   const isBig = useMediaQuery((theme: any) => theme.breakpoints.up('sm'));
   
   return <>
@@ -10,5 +9,3 @@ const Design: FC = () => {
       <div className="design" id="right-image" />
   </>
 };
-
-export default Design;
